@@ -1,4 +1,5 @@
-# Advanced Data Cleaning with Python - Perugia 2016
+# Advanced Data Cleaning with Python
+## Perugia 2016
 
 Welcome! In this session we will show you how you can use Python (2.7, should work on 3.5 as well) clean data! You will get information from a series of spreadsheets that have more or less the same structure and create a single clean CSV file. Pretty rad, huh?
 
