@@ -4,7 +4,7 @@
 
 Welcome! In this session we will show you how you can use Python (2.7, should work on 3.5 as well) clean data! You will get information from a series of spreadsheets that have more or less the same structure and create a single clean CSV file. Pretty rad, huh?
 
-This tutorial was inspired by a script I created for J++ São Paulo to clean some Brazil's government data and an OpenRefine workshop that Sarah Cohen gave during the Computer Assisted Reporting Conference 2016 (CAR Conference 2016) in Denver, USA.
+This tutorial was inspired by a script I created for J++ São Paulo to clean some Brazil's government data and [an excellent OpenRefine workshop](https://github.com/sarahcnyt/data-journalism/tree/master/openrefine) that [Sarah Cohen](https://github.com/sarahcnyt) gave during the [Computer Assisted Reporting Conference 2016](http://www.ire.org/conferences/nicar2016/) (CAR Conference 2016) in Denver, USA.
 
 I will assume:
 
@@ -49,7 +49,9 @@ We will explore a specific case and learn the techniques to work around the issu
 
 ## Our data
 
-Every month, the XXXX of the state of New York, in the US, releases a report with information about health care companies (develop....)
+The original data is: https://www.health.ny.gov/health_care/managed_care/reports/enrollment/monthly/
+
+The xls files in data/ are Medicaid long-term managed care reports from New York State in the United States. This data can be used as a way to determine which company would make a good subject based on its growth and size
 
 The published data is in the XLS format. While these reports are useful for human inspection, they can't really be processed by a computer as they are. We need to find a way to put all the information in every single file together and clean it. Sarah Cohen shows how to do it in OpenRefine. You will learn how to do it with Python.
 
