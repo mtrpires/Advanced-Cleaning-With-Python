@@ -9,8 +9,8 @@ from os import listdir
 # returns a dictionary with YEAR and MONTH
 def getDate(worksheet):
     '''
-    :param worksheet:
-    :return: dictionary
+    sheet: open_workbook.sheet_by_index() object
+    return: dictionary with YEAR and MONTH
     '''
     date = worksheet.cell_value(3, 0)
     match = re.match(r'NYS[ ,]+(\w+)[ ,](\d+)', date).groups()
@@ -29,13 +29,12 @@ basedir = 'data/'
 files = listdir('data')
 
 # Empty list to store only XLS files found in the folder
-sheets = []
-[sheets.append(filename) for filename in files if filename.endswith("xls")]
+sheets = [filename for filename in files if filename.endswith("xls")]
 
 header_is_written = False
 # Iterating over the files in folder
 for filename in sheets:
-    print('Parsing {0}{1}\r'.format(basedir, filename)),
+    print('Parsing {0}{1}\r'.format(basedir, filename))
     # Opens the xls file
     worksheet = open_workbook(basedir + filename).sheet_by_index(0)
     # Get the date from it
