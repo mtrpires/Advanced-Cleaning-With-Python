@@ -2,14 +2,14 @@
 ## International Journalism Festival - Perugia 2016
 ### School of Data (http://schoolofdata.org)
 
-Welcome! In this session we will show you how you can use Python (2.7, should work on 3.5 as well) clean data! You will get information from a series of spreadsheets that have more or less the same structure and create a single clean CSV file. Pretty rad, huh?
+Welcome! In this session we will show you how you can use Python (2.7) clean data! You will get information from a series of spreadsheets that have more or less the same structure and create a single clean CSV file. Pretty rad, huh?
 
-This tutorial was inspired by a script I created for J++ São Paulo to clean some Brazil's government data and [an excellent OpenRefine workshop](https://github.com/sarahcnyt/data-journalism/tree/master/openrefine) that [Sarah Cohen](https://github.com/sarahcnyt) gave during the [Computer Assisted Reporting Conference 2016](http://www.ire.org/conferences/nicar2016/) (CAR Conference 2016) in Denver, USA.
+This tutorial was inspired by a script I created for [J++ São Paulo](http://jmaismais.com) to clean some Brazil's government data and [an excellent OpenRefine workshop](https://github.com/sarahcnyt/data-journalism/tree/master/openrefine) that [Sarah Cohen](https://github.com/sarahcnyt) gave during the [Computer Assisted Reporting Conference 2016](http://www.ire.org/conferences/nicar2016/) (CAR Conference 2016) in Denver, USA.
 
 I will assume:
 
 - You know what Python, ```CSV``` and ```XLS``` files are;
-- You know what regular expressions are;
+- You know what [regular expressions](https://en.wikipedia.org/wiki/Regular_expression) are;
 - You know what modules/libraries are and how to import them;
 - You have some basic knowledge of how computer algorithms work (assign values to variables, create if/else tests, control flows - while/for - etc);
 - You are not afraid of learning a bunch of cool tricks :)
@@ -21,10 +21,10 @@ Even if you don't know all of the above you should be able to follow!
 - Python 2.7 (should work on 3.5 as well, though I haven't tested. Let me know how it goes!);
 - Built-in Regular Expression (```re```) module to find specific text;
 - Built-in ```CSV``` module to create and manipulate ```CSV``` files;
-- ```listdir()``` function from built in ```os``` module, to get the list of file names in a folder; 
-- ```xlrd``` library to manipulate ```XLS``` files. You can install it using ```pip install xlrd```.
+- ```listdir()``` function from built in ```os``` module, to get the list of file names in a folder;
+- ```xlrd``` library to manipulate ```XLS``` files. You can install it using ```pip install xlrd``` on your terminal.
 
-Let's go ahead and do our imports:
+Let's go ahead and do our imports. Create a python file and include the following at the top:
 
 
 ```python
@@ -38,7 +38,7 @@ Good. We should now be able to start cleaning, but a bit of context first.
 
 ## So what are we doing anyway?
 
-Great question. I'll show you how to solve an annoying problem that might pop up anytime during your data journalism career: the data you want is apread across multiple files that **share the same structure between themselves**. This could be the case in a number of situations:
+I'll show you how to solve an annoying problem that might pop up anytime during your data journalism career: the data you want is spread across multiple files that **share the same structure between themselves**. This could be the case in a number of situations:
 
 - A government agency publishes a report every month on their website with updated information;
 - A company publishes, every quarter, reports about their financial status;
@@ -49,17 +49,19 @@ We will explore a specific case and learn the techniques to work around the issu
 
 ## Our data
 
-The original data is: https://www.health.ny.gov/health_care/managed_care/reports/enrollment/monthly/
+The original data is here: https://www.health.ny.gov/health_care/managed_care/reports/enrollment/monthly/
 
-The xls files in data/ are Medicaid long-term managed care reports from New York State in the United States. This data can be used as a way to determine which company would make a good subject based on its growth and size
+The xls files in the ```data/``` folder are Medicaid long-term managed care reports from New York State in the United States. This data can be used as a way to determine which company would make a good subject based on its growth and size.
 
-The published data is in the XLS format. While these reports are useful for human inspection, they can't really be processed by a computer as they are. We need to find a way to put all the information in every single file together and clean it. Sarah Cohen shows how to do it in OpenRefine. You will learn how to do it with Python.
+The published data is in the XLS format. While these reports are useful for human inspection, they can't really be processed by a computer as they are. We need to find a way to put all the information in every single file together and clean it. Sarah Cohen [shows how to do it in OpenRefine](https://github.com/sarahcnyt/data-journalism/tree/master/openrefine). You will learn how to do it with Python.
 
 ## Look for patterns
 
 Computers are really good at doing the same thing over and over. What we want is to find common patterns and assign our script to look for them and repeat the procedure until it's finished. Also, we have to make sure the files share the same pattern -- they have the same number of columns, the same categories, they have the same keywords or empty spaces in similar place, etc.
 
-To make things easier, I excluded from this excersise files before 2013. Why? Because the Yankee government changed the structure of the files slightly, with a different number of columns and the type of data. Including them would give an extra layer of complexity to this tutorial. Since the files after 2013 share the same basic structure, we will figure out how get the information we want from one of them and assign our script to do the same thing for all the other files.
+You may have noticed in the source files that the series go far back 2013. To make things easier, I excluded from this excersise files before 2013. Why? Because the Yankee government changed the structure of the files slightly, with a different number of columns and the type of data. Including them would give an extra layer of complexity to this tutorial. I may include how to extract data from them in the future.
+
+Since the files after 2013 share the same basic structure, we will figure out how get the information we want from one of them and assign our script to do the same thing for all the other files.
 
 ## Design a cleaning strategy
 
@@ -104,7 +106,7 @@ Before starting your cleaning procedure take your time evaluating the files. Wri
 Alright. Let's get to it.
 
 ### Getting the date
-When you open the ```XLS``` files, one of the first things you'll notice is that cell **```A4```** holds the information about the month and year of the current file. That is always the case. We will store this information in two separate columns in our final ```CSV``` files: ```MONTH``` and ```YEAR```. To do that, let's create a helper function that will give us a dictionary with key/value pairs for the ```MONTH``` and for the ```YEAR```. We will use this dictionary later.
+When you open the ```XLS``` files, one of the first things you'll notice is that cell **```A4```** holds the information about the month and year of the current file. That is always the case. We will store this information in two separate columns in our final ```CSV``` file: ```MONTH``` and ```YEAR```. To do that, let's create a function that will give us a dictionary with key/value pairs for the ```MONTH``` and for the ```YEAR```. We will use this dictionary later.
 
 
 ```python
@@ -114,7 +116,7 @@ When you open the ```XLS``` files, one of the first things you'll notice is that
 def getDate(worksheet):
     '''
     worksheet: an xlrd book object
-    :return: dictionary
+    return: dictionary
     '''
     date = worksheet.cell_value(3, 0)
     match = re.match(r'NYS[ ,]+(\w+)[ ,](\d+)', date).groups()
@@ -126,15 +128,15 @@ def getDate(worksheet):
 
 Let's see how this works.
 
-This function needs an ```xlrd``` book object (essentially, the sheet where will extract the information from) that we will create later. It uses the ```cell_value``` method from xlrd to get the contents of a specific cell. The first parameter (3) is the row and the second is the column. Since we want the contents of cell ```A4``` we use the pair 3 (the count starts at zero!) and 0. We store the contents of cell ```A4``` in the variable "date".
+This function needs an ```xlrd``` book object (essentially, the sheet where will extract the information from) that we will create later. It uses the ```cell_value``` method from ```xlrd``` to get the contents of a specific cell. The first parameter (3) is the row and the second is the column. Since we want the contents of cell ```A4``` we use the pair 3 (the count starts at zero!) and 0. We store the contents of cell ```A4``` in the variable ```date```.
 
-After that we do a regex (Regular Expression) search in our ```date``` variable to extract the month and the year. The yankee government sometimes uses a comma to separate ```NYS``` from the month, sometimes it doesn't, which is frustrating. That also happens between month and year. But no matter! Regex to the rescue.
+After that we do a regex (Regular Expression) search in our ```date``` variable to extract the month and the year. The government sometimes uses a comma to separate ```NYS``` from the month, sometimes it doesn't, which is frustrating. That also happens between month and year. But no matter! Regex to the rescue.
 
-```NYS[ ,]+``` = Match a string that starts with NYS and is followed by either an empty space or a comma and any number of characters after that.
+```NYS[ ,]+``` = matches a string that starts with NYS and is followed by either an empty space or a comma and any number of characters after that.
 
-```(\w+)[ ,] =``` Will do our first capture (that's why the parethesis are there): any word after the above followed by an empty space or a comma.
+```(\w+)[ ,] =``` will do our first capture (that's why the parethesis are there): any word after the above followed by an empty space or a comma.
 
-```(\d+)``` = Will do our second capture, any number of digits after the above.
+```(\d+)``` = will do our second capture, any number of digits after the above.
 
 With our two values captured, we create our dictionary and return it.
 
@@ -167,7 +169,7 @@ We will go over each and every ```XLS``` file. We need to tell the script which 
 sheets = [filename for filename in files if filename.endswith("xls")]
 ```
 
-Whoa! Wait a minute. I just did what is called a list comprehension: get the filenames in the files list but only those which end with ```'xls'```. Pretty cool, right?
+Whoa! Wait a minute. I just did what is called a [list comprehension](https://docs.python.org/2/tutorial/datastructures.html#list-comprehensions): get the filenames in the files list but only those which end with ```'xls'```. Pretty cool, right?
 
 ### Thinking ahead
 The first line of a ```CSV``` file is usually the name of the columns, you know, the header. Since we will be writing row by row in our ```CSV``` file using a series of repetitions, we need a device to know if we have written the header or not. Let's create a flag that will help us with that.
@@ -182,7 +184,7 @@ We will set ```header_is_written``` to True after we write the header.
 ## Iterating over the files
 Ok. Now we're going to scrape the information from all the files in the sheets list we just created. To do that we will start a simple for loop.
 
-We will also open the worksheet using ```open_workbook``` from ```xlrd```. Since the information we need is in the first sheet of the file, let's use the ```sheet_by_index()``` method to open that sheet:
+We will also open the worksheet using ```open_workbook``` from ```xlrd```. Since the information we need is in the first sheet of the file, let's use the ```sheet_by_index()``` function to open that sheet:
 
 
 ```python
@@ -190,7 +192,7 @@ for filename in sheets:
     worksheet = open_workbook(basedir + filename).sheet_by_index(0)
 ```
 
-Now let's get the date from this file using the helper function we created in the beginning:
+Now let's get the ```date ``` from this file using the function we created in the beginning:
 
 
 ```python
@@ -203,7 +205,7 @@ Notice we're still inside the loop, so the code needs to be idented. This will b
 
 ## Our reference column
 
-**Column B** is the most important. It has the name of the plans and all the names of the counties are right next to it. Let's get the values in that column and store them in a list. After that we will iterate over them to get what we need.
+**Column B** is the most important. It has the name of the companies and all the names of the counties are right next to it. Let's get the values in that column and store them in a list. After that we will iterate over them to get what we need.
 
 
 ```python
@@ -213,7 +215,7 @@ Notice we're still inside the loop, so the code needs to be idented. This will b
 We're iterating over ```range``` instead of the values because we need to keep track of the coordinate of the cells. With the coordinates we can get the actual content, so we should be fine.
 
 ## Getting the data
-We're all set to get the data we need. Remember we need to get the names of the counties, the name of the plans and the values associated with them. Our reference is the value ```TOTALS:``` in **Column B**. If we find it we will be one cell away from the county name. Let's iterate over the values of **Column B**. If we find ```TOTALS:``` let's save the value immediately to the left in our row dictionary, assigning it to the key ```COUNTY```. We will be using the ```cell_value``` method from ```xlrd```. I'm also using the strip function. It will trim trailing and leading spaces from the cell value, just in case.
+We're all set to get the data we need. Remember we need to get the names of the counties, the name of the companies and the values associated with them. Our reference is the value ```TOTALS:``` in **Column B**. If we find it we will be one cell away from the county name. Let's iterate over the values of **Column B**. If we find ```TOTALS:``` let's save the value immediately to the left in our row dictionary, assigning it to the key ```COUNTY```. We will be using the ```cell_value``` method from ```xlrd```. I'm also using the strip function. It will trim trailing and leading spaces from the cell value, just in case.
 
 
 ```python
@@ -235,7 +237,7 @@ Now we need to get the plan names that are associated with that county. Our robo
 
 So, while the county flag is ```True```, we will store the ```PLAN NAME``` in the dictionary adding the counter to the position of the row. We're also using the nifty ```row_slice``` method from ```xlrd``` to generate a list of all the associated values for that ```PLAN NAME```, from **Columns C** (2) to **G** (6 - the parameter ```end_colx``` gets up to the number before the one you set).
 
-Since we have a list of values in the same order of the columns, we will assign each one of them to the appropriate key in the ```row``` dictionary. The list won't have the actual values, but ```xlrd``` objects with the values. To get the values we need to use the method ```.value```. We're also converting them to integers with the ```int()```  function.
+Since we have a list of values in the same order of the columns, we will assign each one of them to the appropriate key in the ```row``` dictionary. The list won't have the actual values, but ```xlrd``` objects with the values. To get the values we need to use the getter ```.value```. We're also converting them to integers with the ```int()```  function.
 
 # BUT WAIT!
 
@@ -262,7 +264,7 @@ We're also incrementing ```counter``` by 1 so that whenever it goes back to the 
                 counter += 1
 ```
 
-Everything is good. We have the info we need to write the row in the ```CSV``` file. Before we do that, let's set the county flag to False if it finds ```TOTALS:``` once it increments the counter. Also, if the ```PLAN NAME``` in that row was assigned an empty space, it means we reached the end of the counties column. The empty space is what separates the data from the counties from the data for New York city. If that's the case, we will break to get outside of this loop and go to the next file without writing the row with the empty space.
+Everything is good. We have the info we need to write the row in the ```CSV``` file. Before we do that, let's set the county flag to ```False``` if it finds ```TOTALS:``` once it increments the counter. Also, if the ```PLAN NAME``` in that row was assigned an empty space, it means we reached the end of the counties column. The empty space is what separates the data from the counties from the data for New York city. If that's the case, we will ```break``` to get outside of this loop and go to the next file without writing the row with the empty space.
 
 
 ```python
@@ -273,7 +275,7 @@ Everything is good. We have the info we need to write the row in the ```CSV``` f
                     break
 ```
 
-Alright. Time to write the row dictionary to the ```CSV file```. Easy. We will use the ```CSV``` module we imported earlier. Remember the flag we created for the header? The handy thing about having stored all the row information in a dictionary is that we can use the ```writeheader()``` function to get the name of the keys and write the header. Once we do that, we update the ```header_is_written``` flag to ```True``` and never use it again, since we need to do this only once, at the very first iteration :)
+Alright. Time to write the row dictionary to the ```CSV``` file. Easy. We will use the ```CSV``` module we imported earlier. Remember the flag we created for the header? The handy thing about having stored all the row information in a dictionary is that we can use the ```writeheader()``` function to get the name of the keys and write the header. Once we do that, we update the ```header_is_written``` flag to ```True``` and never use it again, since we need to do this only once, at the very first iteration :)
 
 
 ```python
@@ -290,7 +292,7 @@ Alright. Time to write the row dictionary to the ```CSV file```. Easy. We will u
 
 Yeah. That's it.
 
-There's no formula that will fit all files. Every situation will bring new challenges and you will have to figure out what the patterns are and the best way to approach them. There are many ways to clean the same file. We could have used a column other than B as our reference, for example. Use the approach that makes more sense to you.
+There's no formula that will fit all files out there. Every situation will bring new challenges and you will have to figure out what the patterns are and the best way to approach them. There are many ways to clean the same file. We could have used a column other than **B** as our reference, for example. Use the approach that makes more sense to you.
 
 Let's take a look at the whole code, shall we? :)
 
