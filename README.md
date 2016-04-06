@@ -1,6 +1,7 @@
 # Advanced Data Cleaning with Python
 ## International Journalism Festival - Perugia 2016
 ### School of Data (http://schoolofdata.org)
+#### Sildes used in the presentations: [view](https://docs.google.com/presentation/d/10Vwk4hfgkmnAcgNlxmvxYT3LBvXb_j4N26LAe0R-w3Q/edit#slide=id.g122ac16b23_0_8)
 
 Welcome! In this session we will show you how you can use Python (2.7) clean data! You will get information from a series of spreadsheets that have more or less the same structure and create a single clean CSV file. Pretty rad, huh?
 
