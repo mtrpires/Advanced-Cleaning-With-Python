@@ -1,7 +1,11 @@
 from xlrd import open_workbook
+import csv
 
 worksheet = open_workbook('../data/en01_13.xls').sheet_by_index(0)
 
+row = {}
+
+header_is_written = False
 col1_values = worksheet.col_values(1)
 for i in range(len(col1_values)):
     if worksheet.cell_value(i, 1) == u'TOTALS:':
@@ -32,3 +36,10 @@ for i in range(len(col1_values)):
             # If we reach a point in this column that the value is blank, it means our search is over!
             elif row['PLAN NAME'] == '':
                 break
+
+            with open('csv/table.csv', 'a') as f:
+                w = csv.DictWriter(f, row.keys())
+                if header_is_written is False:
+                    w.writeheader()
+                    header_is_written = True
+                w.writerow(row)
