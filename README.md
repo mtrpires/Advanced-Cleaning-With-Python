@@ -1,5 +1,4 @@
 # Advanced Data Cleaning with Python
-## International Journalism Festival - Perugia 2016
 ### School of Data (http://schoolofdata.org)
 #### Sildes used in the presentations: [view](https://docs.google.com/presentation/d/10Vwk4hfgkmnAcgNlxmvxYT3LBvXb_j4N26LAe0R-w3Q/edit?usp=sharing)
 
